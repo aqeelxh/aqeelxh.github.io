@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M Aqeel — Motion & Visual Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a08;
+  --paper: #f5f2eb;
+  --accent: #e8441a;
+  --muted: #8a8a80;
+  --border: rgba(10,10,8,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* GRAIN */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: .4;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 2.5rem;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: .08em;
+  color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink);
+  text-decoration: none; opacity: .5; transition: opacity .2s;
+}
+.nav-links a:hover { opacity: 1; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  padding: 0 2.5rem 3rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg-text {
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(120px, 18vw, 260px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(10,10,8,.06);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap; pointer-events: none;
+  letter-spacing: .04em; user-select: none;
+}
+.hero-left { padding-bottom: 1rem; }
+.hero-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.hero-eyebrow::before {
+  content: ''; display: block;
+  width: 32px; height: 1.5px; background: var(--accent);
+}
+.hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 9vw, 130px);
+  line-height: .92; letter-spacing: .02em;
+  color: var(--ink); margin-bottom: 1.5rem;
+}
+.hero-name em { color: var(--accent); font-style: normal; }
+.hero-desc {
+  font-size: 15px; color: var(--muted);
+  max-width: 380px; line-height: 1.7; margin-bottom: 2rem;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: .75rem;
+  background: var(--ink); color: var(--paper);
+  padding: 14px 28px;
+  font-size: 13px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background .2s;
+}
+.hero-cta:hover { background: var(--accent); }
+.hero-cta svg { transition: transform .2s; }
+.hero-cta:hover svg { transform: translateX(4px); }
+.hero-right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; justify-content: flex-end;
+  gap: 2rem; padding-bottom: 1rem;
+}
+.hero-stats { display: flex; gap: 2.5rem; }
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem; line-height: 1; color: var(--ink);
+}
+.stat-label {
+  font-size: 11px; color: var(--muted);
+  letter-spacing: .08em; text-transform: uppercase; margin-top: .2rem;
+}
+.hero-tools { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+.tool-pill {
+  font-size: 11px; font-weight: 500; letter-spacing: .06em;
+  border: 1px solid var(--border);
+  padding: 5px 12px; color: var(--muted); text-transform: uppercase;
+}
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(6px)}
+}
+
+/* MARQUEE */
+.marquee-wrap {
+  background: var(--ink); padding: 14px 0; overflow: hidden;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: marquee 18s linear infinite; white-space: nowrap;
+}
+.marquee-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem; letter-spacing: .12em;
+  color: var(--paper); opacity: .35;
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 2rem;
+}
+.marquee-item::after { content: '✦'; color: var(--accent); opacity: 1; font-size: .7rem; }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* SECTION */
+.section { padding: 5rem 2.5rem; }
+.section-header {
+  display: flex; align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent);
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: .03em; color: var(--ink); line-height: 1;
+}
+.section-count {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem; color: var(--border); letter-spacing: .04em;
+}
+
+/* ═══ VIDEO GRID ═══
+   2-column grid. No fixed row heights — ever.
+   Landscape cards (.wide) span both columns.
+   Portrait/square cards span 1 column.
+   JS reads each video/image's real dimensions on load
+   and assigns .wide automatically. The browser then
+   sizes the row from the content — always correct ratio.
+*/
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: auto;
+  gap: 10px;
+  align-items: start;   /* row height = tallest natural item */
+}
+
+/* Wide = landscape → full row */
+.video-card.wide { grid-column: 1 / -1; }
+/* Narrow = portrait or square → half row */
+.video-card.narrow { grid-column: span 1; }
+
+/* Card base — NO fixed height, let video drive it */
+.video-card {
+  position: relative; overflow: hidden;
+  background: #111;
+  display: block;
+  width: 100%;
+}
+
+/* THE KEY: video/img sizes the card, not the other way around */
+.video-card video,
+.video-card img.video-thumb {
+  display: block;
+  width: 100%;
+  height: auto;          /* natural aspect ratio always honoured */
+  transition: transform .5s cubic-bezier(.25,.46,.45,.94), opacity .3s;
+  opacity: .9;
+}
+.video-card:hover video,
+.video-card:hover img.video-thumb {
+  transform: scale(1.03);
+  opacity: 1;
+}
+
+/* Placeholder shown before video src is set */
+.video-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;   /* sensible default until real media loads */
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: .6rem;
+  background: #111; color: rgba(255,255,255,.18);
+  font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; text-align: center; padding: 1rem;
+}
+.video-placeholder.portrait { aspect-ratio: 9/16; }
+.video-placeholder.square   { aspect-ratio: 1/1; }
+.video-placeholder svg { opacity: .2; }
+
+/* Overlay — sits on top of the video */
+.video-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 55%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 1rem 1.25rem;
+  opacity: 0; transition: opacity .3s;
+  pointer-events: none;
+}
+.video-card:hover .video-overlay { opacity: 1; }
+.video-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: .25rem;
+}
+.video-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem; color: white; letter-spacing: .04em; line-height: 1.1;
+}
+.play-btn {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  width: 46px; height: 46px;
+  background: var(--accent); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none; z-index: 2;
+}
+.video-card:hover .play-btn { transform: translate(-50%,-50%) scale(1); }
+.video-card > a.cover-link {
+  position: absolute; inset: 0; z-index: 5; text-decoration: none;
+}
+
+/* DESIGN GRID */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.design-card {
+  position: relative; overflow: hidden;
+  background: #111; aspect-ratio: 4/3;
+}
+.design-thumb {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+}
+.design-card:hover .design-thumb { transform: scale(1.05); }
+.design-overlay {
+  position: absolute; inset: 0;
+  background: rgba(232,68,26,.92);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: .4rem;
+  opacity: 0; transition: opacity .25s;
+  text-align: center; padding: 1.5rem;
+}
+.design-card:hover .design-overlay { opacity: 1; }
+.design-overlay-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; color: white; letter-spacing: .06em;
+}
+.design-overlay-tag {
+  font-size: 11px; color: rgba(255,255,255,.75);
+  letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* ABOUT */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.about-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+}
+.about-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 70px);
+  line-height: .95; letter-spacing: .03em;
+  color: var(--paper); margin-bottom: 1.5rem;
+}
+.about-text {
+  font-size: 15px; color: rgba(245,242,235,.55);
+  line-height: 1.8; margin-bottom: 1rem;
+}
+.about-text b { color: var(--paper); font-weight: 500; }
+.skills-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: rgba(245,242,235,.08);
+  border: 1px solid rgba(245,242,235,.08);
+  margin-bottom: 2rem;
+}
+.skill-block { background: #111; padding: 1.25rem; }
+.skill-name { font-size: 13px; font-weight: 600; color: var(--paper); margin-bottom: .5rem; }
+.skill-bar-wrap { height: 2px; background: rgba(255,255,255,.1); position: relative; overflow: hidden; }
+.skill-bar {
+  height: 100%; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .9s cubic-bezier(.25,.46,.45,.94);
+}
+.skill-bar.animate { transform: scaleX(1); }
+.skill-level { font-size: 11px; color: var(--muted); margin-top: .3rem; letter-spacing: .04em; }
+.contact-strip {
+  background: var(--ink); padding: 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.contact-strip-text { font-size: 13px; color: rgba(245,242,235,.5); letter-spacing: .04em; }
+.contact-strip-text b { color: var(--paper); font-weight: 500; }
+.contact-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--accent); color: white;
+  padding: 10px 22px;
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; text-decoration: none;
+  transition: opacity .2s;
+}
+.contact-btn:hover { opacity: .85; }
+
+/* FOOTER */
+footer {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem; letter-spacing: .08em; color: var(--ink);
+}
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a {
+  font-size: 12px; color: var(--muted); text-decoration: none;
+  letter-spacing: .06em; text-transform: uppercase; transition: color .2s;
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-copy { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+
+/* REVEAL */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 900px) {
+  nav { padding: 1.25rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 5.5rem 1.25rem 2.5rem; min-height: auto; gap: 2rem; }
+  .hero-right { align-items: flex-start; }
+  .hero-bg-text { display: none; }
+  .section { padding: 3rem 1rem; }
+
+  /* Mobile grid: same 2-col, auto heights — nothing changes,
+     just tighter gap. Wide cards still span full width. */
+  .video-grid { gap: 6px; }
+
+  .design-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .contact-strip { flex-direction: column; align-items: flex-start; }
+  footer { flex-direction: column; gap: .75rem; }
+  .hero-stats { gap: 1.5rem; }
+  .section-header { gap: 1rem; flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .design-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .hero-name { font-size: 56px; }
+  /* On very small phones, force all video cards full-width */
+  .video-card.narrow { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">M Aqeel<span style="color:var(--accent)">.</span></a>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#design">Design</a>
+    <a href="#about">About</a>
+    <a href="mailto:maqeel@email.com">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">MOTION</div>
+
+  <div class="hero-left reveal">
+    <div class="hero-eyebrow">Available for projects</div>
+    <h1 class="hero-name">M<br><em>AQEEL</em></h1>
+    <p class="hero-desc">
+      Motion designer & video editor based in Lahore, Pakistan.
+      I craft reels, brand promos, and visual stories that actually
+      stop the scroll — powered by After Effects, Premiere Pro, and
+      an obsession with the details.
+    </p>
+    <a href="mailto:maqeel@email.com" class="hero-cta">
+      Get in touch
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="hero-right reveal" style="transition-delay:.15s">
+    <div class="hero-stats">
+      <div><div class="stat-num">3+</div><div class="stat-label">Years editing</div></div>
+      <div><div class="stat-num">50+</div><div class="stat-label">Projects done</div></div>
+      <div><div class="stat-num">∞</div><div class="stat-label">Creative drive</div></div>
+    </div>
+    <div class="hero-tools">
+      <span class="tool-pill">After Effects</span>
+      <span class="tool-pill">Premiere Pro</span>
+      <span class="tool-pill">CapCut</span>
+      <span class="tool-pill">Photoshop</span>
+      <span class="tool-pill">Figma</span>
+      <span class="tool-pill">Lightroom</span>
+      <span class="tool-pill">Blender</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
+      <rect x="1" y="1" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.2" opacity=".4"/>
+      <circle cx="7" cy="6" r="2" fill="currentColor" opacity=".4">
+        <animate attributeName="cy" values="6;12;6" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Reels Editing</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">Color Grading</span>
+    <span class="marquee-item">After Effects</span>
+    <span class="marquee-item">Brand Videos</span>
+    <span class="marquee-item">Visual Design</span>
+    <span class="marquee-item">Photoshop</span>
+    <span class="marquee-item">Cinematic Edits</span>
+    <span class="marquee-item">Reels Editing</span>
+    <span class="marquee-item">Motion Graphics</span>
+    <span class="marquee-item">Color Grading</span>
+    <span class="marquee-item">After Effects</span>
+    <span class="marquee-item">Brand Videos</span>
+    <span class="marquee-item">Visual Design</span>
+    <span class="marquee-item">Photoshop</span>
+    <span class="marquee-item">Cinematic Edits</span>
+  </div>
+</div>
+
+<!-- VIDEO WORK -->
+<section class="section" id="work">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Selected work</div>
+      <h2 class="section-title">Video & Motion</h2>
+    </div>
+    <span class="section-count">01</span>
+  </div>
+
+  <!--
+    HOW TO ADD YOUR VIDEOS:
+    ─────────────────────────────────────────────────────────────────
+    Each .video-card has a <video> tag. Just change the src="".
+    The frame will auto-resize to EXACTLY your video's ratio.
+
+    For local files:   src="myvideo.mp4"
+    For web hosted:    src="https://yoursite.com/video.mp4"
+    For YouTube/Drive: use the thumbnail image approach below.
+
+    For YouTube/Drive links — replace the <video> tag with:
+      <img class="video-thumb" src="your-thumbnail.jpg" alt="title">
+    and set the href on the <a class="cover-link"> to your YouTube URL.
+
+    To add/remove cards: copy or delete a .video-card block.
+    The grid reflows automatically. No CSS to touch.
+    ─────────────────────────────────────────────────────────────────
+  -->
+
+  <div class="video-grid" id="videoGrid">
+
+    <!-- CARD 1 — replace src with your video file path -->
+    <div class="video-card reveal" data-tag="Brand Reel" data-title="Project Title Here" data-href="https://youtube.com/your-link">
+      <video src="" muted playsinline preload="metadata">
+        <!-- fallback placeholder shown until src is set -->
+      </video>
+      <div class="video-placeholder" id="ph1">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">Brand Reel</div>
+        <div class="video-title">Project Title Here</div>
+      </div>
+      <a class="cover-link" href="https://youtube.com/your-link" target="_blank" rel="noopener"></a>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="video-card reveal" style="transition-delay:.06s" data-tag="Reels" data-title="Fashion Edit" data-href="#">
+      <video src="" muted playsinline preload="metadata"></video>
+      <div class="video-placeholder portrait">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">Reels</div>
+        <div class="video-title">Fashion Edit</div>
+      </div>
+      <a class="cover-link" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="video-card reveal" style="transition-delay:.1s" data-tag="Motion Graphics" data-title="Promo Reel" data-href="#">
+      <video src="" muted playsinline preload="metadata"></video>
+      <div class="video-placeholder portrait">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">Motion Graphics</div>
+        <div class="video-title">Promo Reel</div>
+      </div>
+      <a class="cover-link" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="video-card reveal" style="transition-delay:.04s" data-tag="Cinematic" data-title="Brand Showcase" data-href="#">
+      <video src="" muted playsinline preload="metadata"></video>
+      <div class="video-placeholder">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">Cinematic</div>
+        <div class="video-title">Brand Showcase</div>
+      </div>
+      <a class="cover-link" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="video-card reveal" style="transition-delay:.08s" data-tag="AE Animation" data-title="Loop Edit" data-href="#">
+      <video src="" muted playsinline preload="metadata"></video>
+      <div class="video-placeholder square">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">AE Animation</div>
+        <div class="video-title">Loop Edit</div>
+      </div>
+      <a class="cover-link" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="video-card reveal" style="transition-delay:.12s" data-tag="Product" data-title="Quick Promo" data-href="#">
+      <video src="" muted playsinline preload="metadata"></video>
+      <div class="video-placeholder square">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="19" fill="white" fill-opacity=".1"/><path d="M15 12l13 7-13 7V12z" fill="white"/></svg>
+        Drop your video src here
+      </div>
+      <div class="play-btn"><svg width="15" height="15" viewBox="0 0 15 15" fill="white"><path d="M4 2.5l10 5-10 5V2.5z"/></svg></div>
+      <div class="video-overlay">
+        <div class="video-tag">Product</div>
+        <div class="video-title">Quick Promo</div>
+      </div>
+      <a class="cover-link" href="#" target="_blank" rel="noopener"></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- DESIGN WORK -->
+<section class="section" id="design" style="padding-top:0">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Visual work</div>
+      <h2 class="section-title">Design & Photo</h2>
+    </div>
+    <span class="section-count">02</span>
+  </div>
+
+  <div class="design-grid">
+    <div class="design-card reveal">
+      <!-- swap for: <img class="design-thumb" src="design1.jpg" alt="Design"> -->
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">Graphic Design</div>
+      </div>
+    </div>
+
+    <div class="design-card reveal" style="transition-delay:.08s">
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">Photo Edit</div>
+      </div>
+    </div>
+
+    <div class="design-card reveal" style="transition-delay:.16s">
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">Lightroom Edit</div>
+      </div>
+    </div>
+
+    <div class="design-card reveal">
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">UI / Figma</div>
+      </div>
+    </div>
+
+    <div class="design-card reveal" style="transition-delay:.08s">
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">Thumbnail Design</div>
+      </div>
+    </div>
+
+    <div class="design-card reveal" style="transition-delay:.16s">
+      <div class="video-placeholder" style="background:#141410">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><rect width="30" height="30" rx="4" fill="white" fill-opacity=".08"/><rect x="4" y="7" width="22" height="14" rx="1" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><circle cx="9" cy="12" r="2" stroke="white" stroke-opacity=".25" stroke-width="1.2"/><path d="M4 19l6-5 4 4 3-3 7 6" stroke="white" stroke-opacity=".25" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Add image
+      </div>
+      <div class="design-overlay">
+        <div class="design-overlay-title">Project Name</div>
+        <div class="design-overlay-tag">Poster / Social</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about" style="background:var(--ink); color:var(--paper)">
+  <div class="about-grid">
+    <div class="about-left reveal">
+      <div class="about-eyebrow">Who I am</div>
+      <h2 class="about-heading">
+        Built<br>from<br><em style="color:var(--accent)">scratch.</em>
+      </h2>
+      <p class="about-text">
+        I'm a self-taught motion designer and video editor from <b>Lahore, Pakistan</b>.
+        No formal design school — just years of obsessing over frames, effects, and
+        what makes a video actually feel something.
+      </p>
+      <p class="about-text">
+        I specialize in <b>short-form content, brand reels, and motion graphics</b>
+        that make brands look like they have a full creative team behind them.
+        I work remotely with clients globally — and I'm
+        <b style="color:var(--accent)">available for new projects right now.</b>
+      </p>
+    </div>
+
+    <div class="about-right reveal" style="transition-delay:.12s">
+      <div class="skills-grid">
+        <div class="skill-block">
+          <div class="skill-name">After Effects</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.90"></div></div>
+          <div class="skill-level">Advanced</div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-name">Premiere Pro</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.88"></div></div>
+          <div class="skill-level">Advanced</div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-name">Photoshop</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.80"></div></div>
+          <div class="skill-level">Proficient</div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-name">Lightroom</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.85"></div></div>
+          <div class="skill-level">Proficient</div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-name">Figma</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.65"></div></div>
+          <div class="skill-level">Intermediate</div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-name">Blender</div>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="--w:.45"></div></div>
+          <div class="skill-level">Learning</div>
+        </div>
+      </div>
+
+      <div class="contact-strip">
+        <div class="contact-strip-text">
+          Ready to work together?<br>
+          <b>maqeel@email.com &nbsp;·&nbsp; @maqeel</b>
+        </div>
+        <a href="mailto:maqeel@email.com" class="contact-btn">
+          Hire me
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 6h10M6 1l5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">M Aqeel<span style="color:var(--accent)">.</span></div>
+  <div class="footer-links">
+    <a href="https://instagram.com/yourhandle" target="_blank">Instagram</a>
+    <a href="https://youtube.com/@yourchannel" target="_blank">YouTube</a>
+    <a href="https://behance.net/yourprofile" target="_blank">Behance</a>
+    <a href="https://www.fiverr.com/yourprofile" target="_blank">Fiverr</a>
+  </div>
+  <div class="footer-copy">© 2025 M Aqeel — All rights reserved</div>
+</footer>
+
+<script>
+// ─── SCROLL REVEAL ───────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.skill-bar').forEach(b => {
+        const w = getComputedStyle(b).getPropertyValue('--w') || '.8';
+        b.style.transform = `scaleX(${parseFloat(w)})`;
+        b.classList.add('animate');
+      });
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ─── AUTO VIDEO SIZING ────────────────────────────────────────────
+// When a video's dimensions are known, this:
+//   1. Hides the placeholder
+//   2. Marks the card .wide (landscape) or .narrow (portrait/square)
+//      so the grid gives it the right column span
+//
+// "Wide" threshold: width > height  →  spans 2 columns (full row)
+// "Narrow": height >= width          →  spans 1 column (half row)
+//
+// Works for ANY ratio — 16:9, 9:16, 1:1, 4:3, 21:9, anything.
+// Just set src="" on the <video> tag and this handles the rest.
+
+function applyVideoSize(card, w, h) {
+  const ph = card.querySelector('.video-placeholder');
+  const vid = card.querySelector('video');
+  if (ph) ph.style.display = 'none';
+  if (vid) vid.style.display = 'block';
+
+  const isWide = w > h;
+  card.classList.toggle('wide',   isWide);
+  card.classList.toggle('narrow', !isWide);
+}
+
+function initVideoCards() {
+  document.querySelectorAll('.video-card').forEach(card => {
+    const vid = card.querySelector('video');
+    if (!vid) return;
+
+    // If src is already loaded and dimensions known
+    if (vid.videoWidth && vid.videoHeight) {
+      applyVideoSize(card, vid.videoWidth, vid.videoHeight);
+      return;
+    }
+
+    // If src is empty, keep the placeholder visible as-is
+    if (!vid.src || vid.src === window.location.href) {
+      // placeholder stays — mark as narrow or wide based on placeholder class
+      const ph = card.querySelector('.video-placeholder');
+      if (ph && ph.classList.contains('portrait')) {
+        card.classList.add('narrow');
+      } else if (ph && ph.classList.contains('square')) {
+        card.classList.add('narrow');
+      } else {
+        card.classList.add('wide'); // default horizontal placeholder
+      }
+      return;
+    }
+
+    // Wait for metadata to load
+    vid.addEventListener('loadedmetadata', () => {
+      applyVideoSize(card, vid.videoWidth, vid.videoHeight);
+    });
+
+    // Also handle img thumbnails used instead of video
+    const img = card.querySelector('img.video-thumb');
+    if (img) {
+      const check = () => applyVideoSize(card, img.naturalWidth, img.naturalHeight);
+      img.complete ? check() : img.addEventListener('load', check);
+    }
+  });
+}
+
+// Run on load
+initVideoCards();
+
+// Re-run if cards are added dynamically
+const gridObs = new MutationObserver(initVideoCards);
+const grid = document.getElementById('videoGrid');
+if (grid) gridObs.observe(grid, { childList: true });
+</script>
+</body>
+</html>
